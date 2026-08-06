@@ -9,6 +9,9 @@ from app.database.base import Base
 from app.models.user import User
 from app.models.employee import Employee
 from app.models.customer import Customer
+from app.models.product import Product
+from app.models.sale import Sale
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
