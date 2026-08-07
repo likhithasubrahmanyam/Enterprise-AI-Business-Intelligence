@@ -3,7 +3,11 @@ from sqlalchemy.orm import Session
 
 from app.database.session import get_db
 from app.core.security import get_current_user
-from app.schemas.dashboard import DashboardSummary
+from app.schemas.dashboard import (
+    DashboardSummary,
+    MonthlyRevenue,
+    TopProduct,
+)
 from app.services.dashboard_service import DashboardService
 
 router = APIRouter()
@@ -20,3 +24,25 @@ def get_dashboard_summary(
     current_user=Depends(get_current_user)
 ):
     return service.get_dashboard_summary(db)
+
+
+@router.get(
+    "/monthly-revenue",
+    response_model=list[MonthlyRevenue]
+)
+def get_monthly_revenue(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return service.get_monthly_revenue(db)
+
+
+@router.get(
+    "/top-products",
+    response_model=list[TopProduct]
+)
+def get_top_products(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return service.get_top_products(db)
