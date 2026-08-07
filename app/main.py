@@ -5,6 +5,7 @@ from app.api.v1.employees.routes import router as employee_router
 from app.api.v1.customers.routes import router as customer_router
 from app.api.v1.products.routes import router as product_router
 from app.api.v1.sales.routes import router as sale_router
+from app.api.v1.dashboard.routes import router as dashboard_router
 app = FastAPI(
     title="Enterprise AI Business Intelligence API",
     description="AI-powered Business Intelligence System",
@@ -39,6 +40,12 @@ app.include_router(
     sale_router,
     prefix="/api/v1/sales",
     tags=["Sales"]
+)
+
+app.include_router(
+    dashboard_router,
+    prefix="/api/v1/dashboard",
+    tags=["Dashboard"]
 )
 
 @app.get("/")
