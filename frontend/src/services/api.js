@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://enterprise-ai-business-intelligence-y7ar.onrender.com";
+const API_BASE_URL = "https://enterprise-ai-business-intelligence-y7ar.onrender.com/api/v1";
 
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem("token");
