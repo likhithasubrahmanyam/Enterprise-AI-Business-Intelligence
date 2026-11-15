@@ -7,8 +7,13 @@ from app.schemas.dashboard import (
     DashboardSummary,
     MonthlyRevenue,
     TopProduct,
+    TopCustomer,
+    TopEmployee,
+    LowStockProduct,
+    SalesTrend,
 )
 from app.services.dashboard_service import DashboardService
+
 
 router = APIRouter()
 
@@ -46,3 +51,44 @@ def get_top_products(
     current_user=Depends(get_current_user)
 ):
     return service.get_top_products(db)
+
+
+@router.get(
+    "/top-customers",
+    response_model=list[TopCustomer]
+)
+def get_top_customers(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return service.get_top_customers(db)
+
+@router.get(
+    "/top-employees",
+    response_model=list[TopEmployee]
+)
+def get_top_employees(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return service.get_top_employees(db)
+
+@router.get(
+    "/low-stock-products",
+    response_model=list[LowStockProduct]
+)
+def get_low_stock_products(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return service.get_low_stock_products(db)
+
+@router.get(
+    "/sales-trend",
+    response_model=list[SalesTrend]
+)
+def get_sales_trend(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return service.get_sales_trend(db)

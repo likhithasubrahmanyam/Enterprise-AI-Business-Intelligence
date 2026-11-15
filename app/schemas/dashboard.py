@@ -22,3 +22,18 @@ class TopCustomer(BaseModel):
     company_name: str
     total_orders: int
     revenue: float
+
+class TopEmployee(BaseModel):
+    employee_name: str
+    sales_count: int
+    revenue: float
+
+class LowStockProduct(BaseModel):
+    product_name: str
+    stock_quantity: int
+    reorder_level: int
+
+class SalesTrend(BaseModel):
+    date: str
+    sales: int
+    revenue: float

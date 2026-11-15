@@ -41,7 +41,7 @@ class DashboardRepository:
             "total_customers": total_customers,
             "total_products": total_products,
             "total_sales": total_sales,
-            "total_revenue": total_revenue,
+            "total_revenue": float(total_revenue),
             "low_stock_products": low_stock_products,
         }
 
@@ -149,6 +149,97 @@ class DashboardRepository:
             {
                 "company_name": row.company_name,
                 "total_orders": int(row.total_orders),
+                "revenue": float(row.revenue)
+            }
+            for row in result
+        ]
+
+    def get_top_employees(
+        self,
+        db: Session
+    ):
+
+        result = (
+            db.query(
+                Employee.full_name.label("employee_name"),
+                func.count(Sale.id).label("sales_count"),
+                func.sum(Sale.total_amount).label("revenue")
+            )
+            .join(
+                Employee,
+                Sale.employee_id == Employee.id
+            )
+            .group_by(
+                Employee.full_name
+            )
+            .order_by(
+                func.sum(Sale.total_amount).desc()
+            )
+            .all()
+        )
+
+        return [
+            {
+                "employee_name": row.employee_name,
+                "sales_count": int(row.sales_count),
+                "revenue": float(row.revenue)
+            }
+            for row in result
+        ]
+
+    def get_low_stock_products(
+        self,
+        db: Session
+    ):
+
+        result = (
+            db.query(
+                Product.product_name.label("product_name"),
+                Product.stock_quantity.label("stock_quantity"),
+                Product.reorder_level.label("reorder_level")
+            )
+            .filter(
+                Product.stock_quantity <= Product.reorder_level
+            )
+            .order_by(
+                Product.stock_quantity.asc()
+            )
+            .all()
+        )
+
+        return [
+            {
+                "product_name": row.product_name,
+                "stock_quantity": int(row.stock_quantity),
+                "reorder_level": int(row.reorder_level)
+            }
+            for row in result
+        ]
+
+    def get_sales_trend(
+        self,
+        db: Session
+    ):
+
+        result = (
+            db.query(
+                Sale.sale_date.label("date"),
+                func.count(Sale.id).label("sales"),
+                func.sum(Sale.total_amount).label("revenue")
+            )
+            .group_by(
+                Sale.sale_date
+            )
+            .order_by(
+                Sale.sale_date
+            )
+            .all()
+        )
+
+        return [
+            {
+                "date": str(row.date),
+                "sales": int(row.sales),
                 "revenue": float(row.revenue)
             }
             for row in result
